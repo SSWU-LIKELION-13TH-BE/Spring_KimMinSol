@@ -1,6 +1,7 @@
 package com.likelion.session1.controller;
 
 import com.likelion.session1.dto.calculator.request.CalculatorAddRequest;
+import com.likelion.session1.dto.calculator.request.CalculatorDivideRequest;
 import com.likelion.session1.dto.calculator.request.CalculatorMultiplyRequest;
 import com.likelion.session1.dto.calculator.request.CalculatorSubtractRequest;
 import com.likelion.session1.service.calculator.CalculatorService;
@@ -57,4 +58,8 @@ public class CalculatorController {
         return calculatorService.subtract(request.getNumber1(), request.getNumber2());
     }
 
+    @PostMapping("/divide")
+    public int divideTwoNumbers(@RequestBody CalculatorDivideRequest request) {
+        return calculatorService.divide(request.getNumber1(), request.getNumber2());
+    }
 }
