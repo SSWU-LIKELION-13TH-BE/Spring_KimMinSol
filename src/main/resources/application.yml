@@ -26,3 +26,9 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: true
+
+  profiles:
+    include: secret
+
+# s3 관련설정 추가 버킷이름, 받은 access-key , secret-key 세팅 리전 ap-northest-2(서울) 로 지정
+# 리전은 AWS 데이터 센터가 위치한 물리적인 지역을 의미
