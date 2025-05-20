@@ -34,4 +34,6 @@ public class Board {
     @PrePersist
     protected void onCreate() { this.postDate = LocalDate.now(); }
 
+    @Column
+    private String image;
 }
