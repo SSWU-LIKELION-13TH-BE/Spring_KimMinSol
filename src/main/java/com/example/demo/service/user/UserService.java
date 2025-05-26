@@ -1,5 +1,6 @@
 package com.example.demo.service.user;
 
+import com.example.demo.dto.user.request.UpdatePasswordRequestDto;
 import com.example.demo.dto.user.request.UserLoginRequestDto;
 import com.example.demo.dto.user.request.UserSignupRequestDto;
 import com.example.demo.dto.user.response.UserLoginResponseDto;
@@ -66,5 +67,22 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다: " + userId));
     }
+
+    public void updatePassword(String userId, UpdatePasswordRequestDto dto) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("현재 비밀번호와 일치하지 않습니다.");
+        }
+
+        if (!dto.getNewPassword().equals(dto.getConfirmPassword())) {
+            throw new IllegalArgumentException("새 비밀번호와 확인이 일치하지 않습니다.");
+        }
+
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+        userRepository.save(user);
+    }
+
 
 }

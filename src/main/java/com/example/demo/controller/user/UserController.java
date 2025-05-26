@@ -1,5 +1,6 @@
 package com.example.demo.controller.user;
 
+import com.example.demo.dto.user.request.UpdatePasswordRequestDto;
 import com.example.demo.dto.user.request.UserLoginRequestDto;
 import com.example.demo.dto.user.request.UserSignupRequestDto;
 import com.example.demo.dto.user.response.UserLoginResponseDto;
@@ -56,6 +57,23 @@ public class UserController {
         response.put("profileImage", user.getProfileImage());
 
         return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<?> updatePassword(@RequestBody UpdatePasswordRequestDto dto,
+                                            HttpServletRequest request) {
+        try {
+            String token = jwtTokenProvider.resolveToken(request);
+            if (token == null || !jwtTokenProvider.validateToken(token)) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("인증 실패: 유효하지 않은 토큰");
+            }
+
+            String userId = jwtTokenProvider.getUserId(token);
+            userService.updatePassword(userId, dto);
+            return ResponseEntity.ok("비밀번호 변경 성공!");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }
